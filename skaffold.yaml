@@ -3,10 +3,27 @@ kind: Config
 deploy:
   kubectl:
     manifests:
-      - k8s/*.yaml
+      - k8s/dev/*.yaml
 
 portForward:
   - resourceType: Service
     resourceName: quickstart-kb-http
     port: 5601
     localPort: 5601
+
+profiles:
+  - name: prod
+    patches:
+      - op: replace
+        path: /deploy/kubectl/manifests
+        value:
+          - k8s/prod/*.yaml
+  - name: website
+    patches:
+      - op: add
+        path: /deploy
+        value:
+          helm:
+            releases:
+              - name: website
+                chartPath: charts/website

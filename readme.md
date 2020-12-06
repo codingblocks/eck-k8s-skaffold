@@ -98,15 +98,6 @@ Skaffold is a tool for managing YOUR workflow, and it's surprisingly simple. We'
 
 We've got a bit of boilerplate to start here, pretty much everything in k8s land needs an apiVersion and a kind. Next we tell skaffold that we have a folder of kubernetes files that we want to apply.
 
-```
-apiVersion: skaffold/v2beta10
-kind: Config
-deploy:
-  kubectl:
-    manifests:
-      - k8s/*.yaml
-```
-
 We can run this with `skaffold dev` to start up our environment. One cool thing about skaffold is it watches the directories it knows about for changes. Let's add some nodes!
 
 Skaffold doesn't just watch for yaml changes. It works for any files it knows about. If you have a python application server hooked up in your skaffold file, then it will reload that on any changes you make in the python.
@@ -130,17 +121,32 @@ Skaffold can do a lot of other things, but there are two other capabilities that
 - Profiles
 - CI/CD
 
-I mentioned the problem where a developer might need to work with a different version or configuration. So let's look at how we can handle that with Helm and Skaffold.
+I mentioned the problem where a developer might need to work with a different version or configuration. Skaffold gives you a great feature named profiles which helps with that.
 
-If you're not familiar with Helm, it's a really common tool for working with Kubernetes that gives you templating capabilities. Ie: loops and variables.
+Profiles offer a way to conditionally add, remote, or replace components.
+
+I'll show you a quick example, so you can see how it works. We can add a profile named "prod" that increases the number of nodes in our cluster. You can now call skaffold with the name of this profile in order to run it.
+
+In this case I just copied the files we already had and changed a value. There is a better way to do that, with yet another tool for Kubernetes called Helm. I wanted to keep things simple for this talk, but I did want to quickly show how you can leverage helm here as well.
 
 ```
-helm create helm/elasticstack
+mkdir charts
+helm create charts/website
 ```
 
-This creates a example chart, but we really only need a few things so I'm going to delete all the stuff we don't care about an dcopy in the k8s files from before.
+This creates a sample helm chart, which expands on Kubernetes by allowing templating, and variables, and tests, and dependencies and...a bunch of other stuff. We don't need to go into it, but if there are any Kubernetes power users out there I wanted you to see what that was like and it gives me the chance to show you how you can combine profiles in interesting ways.
 
-Then I'm going to impliment variables for version and nodeCount. 
+You can also have profiles conditionally activate based on environmental settings.
+
+## Advanced?
+
+<Depending on time>
+
+## Publish
+
+So far we've only worked with Skaffold dev, but that's not the only verb. In fact, there are about a dozen, mainly tailored for CI/CD operations.
+
+We're going to look at one in particular that combines some of the other actions. It's simpler, but those other actions are there so that you can have more flexibility to use skaffold however you like.
 
 
 ## Conclusion
