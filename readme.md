@@ -59,3 +59,84 @@ Local development is better in every way I can think of, except that it puts the
 ## Demo
 
 Today I'm going to show you how you can use Elastic Cloud on Kubernetes, and Skaffold - an open source tool from Google that makes it easy to develop and publish your architecture to Kubernetes so you can focus on getting work done.
+
+
+### Part 1: Install ECK
+
+I'm not going to spend much time talking about ECK, that's a whole talk on it's own. TL;DR version, ECK provides you with a nice control plane for working with Elastic.
+
+TODO Question: Licensing?
+TODO: Download a back-up of ECK
+TODO: TLS between?
+
+#### Install the CRD
+- kubectl apply -f https://download.elastic.co/downloads/eck/1.3.0/all-in-one.yaml
+- view logs
+
+#### Create Elasticsearch / Kibana
+
+(This is straight from the quickstart)
+
+- `kubectl apply -f .\k8s\elasticsearch.yaml`
+- `kubectl apply -f .\k8s\kibana.yaml`
+- `kubectl get secret quickstart-es-elastic-user -o go-template='{{.data.elastic | base64decode}}`'
+- port-forward Kibana
+- `kubectl describe crd elasticsearch`
+
+#### What is our life like now?
+
+Well, we have some files defined that work for dev. They're not good enough for prod, starting/stopping involves running a couple commands. This will get worse as we add more services...
+
+#### Enter skaffold
+
+- choco install -y skaffold
+- https://skaffold.dev/docs/references/yaml/
+
+```
+apiVersion: skaffold/v2beta10
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - k8s/*.yaml
+```
+
+Yeah, we could port-forward but...
+
+```
+portForward:
+  - resourceType: Service
+    resourceName: quickstart-kb-http
+    port: 5601
+    localPort: 5601
+```
+
+What happens if I change something?
+
+Skaffold is responsible for watching the files it knows about in order to smartly update!
+
+What is dev live like? `skaffold dev --port-forward`
+
+TODO:
+- Push to "production"
+- Helm charts, variables
+- Profiles
+
+
+
+- [What else can Skaffold do?](https://skaffold.dev/docs/)
+  - Image building
+  - Testers
+  - Deployers
+  - Tag Policies
+  - Push Strategies
+  - Demo environments
+
+
+- What now?
+- Install skaffold, Docker, Create a skaffold.yaml file and go live your best lyfe!
+
+## Resources
+
+- [Elastic Cloud on Kubernetes Quickstart](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-quickstart.html)
+- [Get started with skaffold](https://skaffold.dev/docs/quickstart/)
