@@ -4,13 +4,11 @@ deploy:
   kubectl:
     manifests:
       - k8s/dev/*.yaml
-
 portForward:
   - resourceType: Service
     resourceName: quickstart-kb-http
     port: 5601
     localPort: 5601
-
 profiles:
   - name: prod
     patches:

@@ -22,7 +22,7 @@ Joe Zack is a Software Developer with a focus in streaming analytics and a newfo
 
 In this presentation we are going to build a local development environment for the Elastic Stack that will be easy to work with in Kubernetes.
 
-Everything you need to run this environment is up on Github, there is a link in the description. Of course, I tried to make it as easy as possible to get started. I tried to be really careful when I did this, because sometimes presentations or videos or blogs will boil something down to a really simple prototype. As soon as you try to make any changes, the whole thing falls apart because the prototype was designed to be demonstratable, not for production.
+The code for this up on Github, there is a link in the description. Of course, I tried to make it as easy as possible to get started. I tried to be really careful when I did this, because sometimes presentations or videos or blogs will boil something down to a really simple prototype. As soon as you try to make any changes, the whole thing falls apart because the prototype was designed to be demonstratable, not for production.
 
 I want this demonstration to be different. I want to give you something you can take and make your own. In fact we'll be creating and evolving several different envronments throughout this talk.
 
@@ -178,3 +178,10 @@ TODO:
 
 - [Elastic Cloud on Kubernetes Quickstart](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-quickstart.html)
 - [Get started with skaffold](https://skaffold.dev/docs/quickstart/)
+
+## TODO
+
+- Docker container
+- Namespace mystery?
+- Setup another cluster
+- Operator installation
