@@ -16,6 +16,13 @@ profiles:
         path: /deploy/kubectl/manifests
         value:
           - k8s/prod/*.yaml
+  - name: filebeat
+    patches:
+      - op: add
+        path: /deploy/kubectl/manifests
+        value:
+          - k8s/filebeat/*.yaml
+
   - name: website
     patches:
       - op: add

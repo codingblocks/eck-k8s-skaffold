@@ -180,8 +180,6 @@ TODO:
 - [Get started with skaffold](https://skaffold.dev/docs/quickstart/)
 
 ## TODO
-
-- Docker container
-- Namespace mystery?
-- Setup another cluster
+- Fix the username/password
+- Add text for the demo for filebeat profile
 - Operator installation
