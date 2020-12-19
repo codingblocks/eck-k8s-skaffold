@@ -21,6 +21,7 @@ profiles:
       - op: add
         path: /deploy/kubectl/manifests
         value:
+          - k8s/dev/*.yaml
           - k8s/filebeat/*.yaml
 
   - name: website

@@ -180,6 +180,14 @@ TODO:
 - [Get started with skaffold](https://skaffold.dev/docs/quickstart/)
 
 ## TODO
-- Fix the username/password
+
+- Work on build/deployment
+  - Add a container that needs to be built
+  - Figure out the story around that build
 - Add text for the demo for filebeat profile
-- Operator installation
+- Demo: Add an import for a static file
+
+### Nice to Have
+- Demo: Consider helm installation?
+- Bug: Why is the "add" in profile filebeat replacing rather than adding the manifest?
+- Bug: port forwarding service-quickstart-kb-http-default-5601 got terminated: output 
