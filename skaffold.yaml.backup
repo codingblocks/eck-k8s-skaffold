@@ -1,35 +1,37 @@
 apiVersion: skaffold/v2beta10
 kind: Config
-
-build:
-  artifacts:
-    - image: website
-      context: charts/website
-
 deploy:
   kubectl:
     manifests:
       - https://download.elastic.co/downloads/eck/1.3.1/all-in-one.yaml
       - k8s/dev/*.yaml
-
-profiles:
-  - name: prod
-    patches:
-      - op: replace
-        path: /deploy/kubectl/manifests
-        value:
-          - https://download.elastic.co/downloads/eck/1.3.1/all-in-one.yaml
-          - k8s/prod/*.yaml
-  - name: filebeat
-    patches:
-      - op: add
-        path: /deploy/kubectl/manifests
-        value:
-          - k8s/filebeat/*
-
 portForward:
   - resourceType: Service
     resourceName: quickstart-kb-http
     port: 5601
     localPort: 5601
     namespace: default
+profiles:
+  - name: prod
+    patches:
+      - op: replace
+        path: /deploy/kubectl/manifests
+        value:
+          - k8s/prod/*.yaml
+  - name: filebeat
+    patches:
+      - op: add
+        path: /deploy/kubectl/manifests
+        value:
+          - k8s/dev/*.yaml
+          - k8s/filebeat/*.yaml
+
+  - name: website
+    patches:
+      - op: add
+        path: /deploy
+        value:
+          helm:
+            releases:
+              - name: website
+                chartPath: charts/website

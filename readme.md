@@ -4,8 +4,6 @@ Elastic Cloud on Kubernetes (ECK) provides everything you need to run the Elasti
 
 By the end of this presentation, you will be creating your own Elastic Stack architectures for development, testing, experimentation, and fun. Yes, really!
 
-# TODO Loading data
-
 ## Requirements
 
 - Skaffold
@@ -15,6 +13,10 @@ By the end of this presentation, you will be creating your own Elastic Stack arc
 
 ## About the Author:
 Joe Zack is a Software Developer with a focus in streaming analytics and a newfound love of DevOps. He is a host of the Coding Blocks podcast, and he wants to #getgood at Python.
+
+## Before Starting
+
+- Reset Kuberentes!
 
 ## Presentation
 
@@ -61,48 +63,45 @@ But that's where the tooling comes in.
 
 I'm going to show you how you can use Skaffold, an open source tool from Google, to make it easy to develop, evolve, and publish your architecture to Kubernetes so you can focus on the work that makes your organization unique.
 
+### Part 1: Create the skaffold file
 
-### Part 1: Install ECK
+All kubernetes files need to have an apiVersion `skaffold/v2beta10` and a kind `Config`, and Skaffold follows this convention.
+
+Next, we'll create a deploy section so we can install ECK.
 
 I'm not going to spend much time talking about ECK, that's a whole talk on it's own. TL;DR version, ECK provides you with custom resource definitions that make working with Elastic and Kubernetes really easy.
 
-TODO: Download a back-up of ECK
-
 #### Install the CRD
 
-- kubectl apply -f https://download.elastic.co/downloads/eck/1.3.0/all-in-one.yaml
-- view logs
+```
+kubectl:
+  manifests:
+    - https://download.elastic.co/downloads/eck/1.3.0/all-in-one.yaml
+```
 
-If we check the logs we can see that this operator is managing our certificates and is just kinda hanging out waiting for something to do.
+I just told skaffold that there are some files that need to be deployed. Now we can run `skaffold deploy` and it will deploy ECK
+
 
 #### Create Elasticsearch / Kibana
 
 I grabbed a couple files from the ECK quickstart. These fields reference the custom resource definitions we installed earlier, and the operator knows what to do with them.
 
-- `kubectl apply -f k8s`
+We can add these files to our list of manifests, and do another `skaffold deploy`
+
 - Check the logs
-- `kubectl get secret quickstart-es-elastic-user -o go-template='{{.data.elastic | base64decode}}`'
 - port-forward Kibana
 
 #### What is our life like now?
 
-Well, we have some files defined that work for dev. This is about where ECK presentations normally end, but it's not enough. Port-forwarding is awkard and we need different configurations for different environments. Any changes that we need to make require going back to the command line to be applied. Yuck.
+We have a file, checked into source control, that devs can use to start up our services with a single command.
 
-#### Enter skaffold
+We can do better though, port-forwarding is awkward, and you have to deploy every time you make a change.
 
-- choco install -y skaffold
-- https://skaffold.dev/docs/references/yaml/
+## Skaffold Dev
 
+If we run `skaffold dev --port-forward` then skaffold watches our files for changes, and will automatically deploy them. Additionally, it will automatically set up any port-forwards that it can see.
 
-Skaffold is a tool for managing YOUR workflow, and it's surprisingly simple. We'll create a new file with information about our environments. The formal reference is a single web page, because Skaffold is simple but it's extremely expressive - meaning you can do a lot, with a ittle.
-
-We've got a bit of boilerplate to start here, pretty much everything in k8s land needs an apiVersion and a kind. Next we tell skaffold that we have a folder of kubernetes files that we want to apply.
-
-We can run this with `skaffold dev` to start up our environment. One cool thing about skaffold is it watches the directories it knows about for changes. Let's add some nodes!
-
-Skaffold doesn't just watch for yaml changes. It works for any files it knows about. If you have a python application server hooked up in your skaffold file, then it will reload that on any changes you make in the python.
-
-More on that in a sec. I want to configure port-forwarding so that developers on my team can get to work with a single command.
+There is a catch here, life isn't perfect. Skaffold doesn't know how to port-forward our services because they
 
 ```
 portForward:
@@ -110,24 +109,43 @@ portForward:
     resourceName: quickstart-kb-http
     port: 5601
     localPort: 5601
+    namespace: default
 ```
 
 What is dev live like? `git clone && skaffold dev --port-forward`
 
 ## Profiles
 
-Skaffold can do a lot of other things, but there are two other capabilities that I want to focus on.
+Ok, we have Elastic..but we aren't doing anything with it. If you're working on ingestion related tasks, you may want a blank slate.
 
-- Profiles
-- CI/CD
+Most of the time, you're probably wanting to load some data. Lets setup a profile that gives our developers the _option_ to start loading data.
 
-I mentioned the problem where a developer might need to work with a different version or configuration. Skaffold gives you a great feature named profiles which helps with that.
+```
+  - name: filebeat
+    patches:
+      - op: add
+        path: /deploy/kubectl/manifests
+        value:
+          - k8s/filebeat/*
+```
 
-Profiles offer a way to conditionally add, remote, or replace components.
+Yay, data!
 
-I'll show you a quick example, so you can see how it works. We can add a profile named "prod" that increases the number of nodes in our cluster. You can now call skaffold with the name of this profile in order to run it.
+Now, it's not too hard to imagine setting up different clusters as profiles. For example, maybe you want to setup profiles for running different versions of Elasticsearch, or loading different sets of data.
 
-In this case I just copied the files we already had and changed a value. There is a better way to do that, with yet another tool for Kubernetes called Helm. I wanted to keep things simple for this talk, but I did want to quickly show how you can leverage helm here as well.
+```
+  - name: prod
+    patches:
+      - op: replace
+        path: /deploy/kubectl/manifests
+        value:
+          - https://download.elastic.co/downloads/eck/1.3.1/all-in-one.yaml
+          - k8s/prod/*.yaml
+```
+
+Quick note: Helm is a really popular tool for templating Kubernetes files, so you can have variables, loops, conditionals, etc. I didn't want to get into Helm in this talk, because it adds a new complicated dimenions but I want to make sure you know that it's fully supported.
+
+## Optional Helm file (Depending on Time)
 
 ```
 mkdir charts
@@ -138,27 +156,25 @@ This creates a sample helm chart, which expands on Kubernetes by allowing templa
 
 You can also have profiles conditionally activate based on environmental settings.
 
-## Advanced?
+## Publishing
 
-<Depending on time>
+So far we've only worked with Skaffold dev, but that's not the only verb. In fact, there are about a dozen, with several tailored for CI/CD operations.
 
-## Publish
+`skaffold --help`
 
-So far we've only worked with Skaffold dev, but that's not the only verb. In fact, there are about a dozen, mainly tailored for CI/CD operations.
+Let's setup a quick build, and then I'll show you how you what it is like to use skaffold in your CI/CD pipeline.
 
-We're going to look at one in particular that combines some of the other actions. It's simpler, but those other actions are there so that you can have more flexibility to use skaffold however you like.
+## Build
+
+```
+build:
+  artifacts
+```
 
 
 ## Conclusion
 
 I love Elastic, Kubernetes and Skaffold. If your org has already decided to run Elastic Stack in Kubernetes, then I think Skaffold is a no-brainer. It makes local development, maintenance, and deployment simple and it's got a low barrier to entry, requiring no refactoring.
-
-
-TODO:
-- Push to "production"
-  - What if production isn't Kubernetes?
-- Helm charts, variables
-- Profiles
 
 - [What else can Skaffold do?](https://skaffold.dev/docs/)
   - Image building
