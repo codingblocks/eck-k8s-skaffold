@@ -171,12 +171,25 @@ build:
   artifacts
 ```
 
+Now skaffold knows about a docker image, Docker isn't the only thing Skaffold knows how to build, but it's the default.
 
-## Conclusion
+Any changes made in this directory will trigger a rebuild of the image. Additionally, now skaffold has some work to do when we do a `skaffold build`.
 
-I love Elastic, Kubernetes and Skaffold. If your org has already decided to run Elastic Stack in Kubernetes, then I think Skaffold is a no-brainer. It makes local development, maintenance, and deployment simple and it's got a low barrier to entry, requiring no refactoring.
+The result of a skaffold build is a tagged image. If we were running this in a CI/CD pipeline we would then retag this image and push it out to our container registry. It was tempting to demo all that, but I wanted to keep things a bit more focused so I'll leave it as an excercise for you. Hit me up on Twitter if you have any questions.
 
-- [What else can Skaffold do?](https://skaffold.dev/docs/)
+Speaking of CI/CD servers, we can also use `skaffold deploy`
+
+## Deploy
+
+TODO
+
+`skaffold deploy --help`
+
+
+## [What else can Skaffold do?](https://skaffold.dev/docs/)
+
+There is a lot we didn't cover, for the sake of time, but hopefully I showed you how you can install Skaffold and create a skaffold.yaml file to serve as the bedrock for your development, build, and deployments to keep your dev and production environments in sync.
+
   - Image building
   - Testers
   - Deployers
@@ -187,6 +200,10 @@ I love Elastic, Kubernetes and Skaffold. If your org has already decided to run 
   - Health/Status checks
   - Debugging
 
+## Conclusion
+
+I love Elastic, Kubernetes and Skaffold. If your org has already decided to run Elastic Stack in Kubernetes, then I think Skaffold is a no-brainer. Even if you're org isn't using Kubernetes, I think it's a great choice, better than docker-compose for example, because of it's tie-ins with CI/CD.
+
 - What now?
 - Install skaffold, Docker, Create a skaffold.yaml file and go live your best lyfe!
 
@@ -194,16 +211,3 @@ I love Elastic, Kubernetes and Skaffold. If your org has already decided to run 
 
 - [Elastic Cloud on Kubernetes Quickstart](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-quickstart.html)
 - [Get started with skaffold](https://skaffold.dev/docs/quickstart/)
-
-## TODO
-
-- Work on build/deployment
-  - Add a container that needs to be built
-  - Figure out the story around that build
-- Add text for the demo for filebeat profile
-- Demo: Add an import for a static file
-
-### Nice to Have
-- Demo: Consider helm installation?
-- Bug: Why is the "add" in profile filebeat replacing rather than adding the manifest?
-- Bug: port forwarding service-quickstart-kb-http-default-5601 got terminated: output 

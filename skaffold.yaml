@@ -6,7 +6,6 @@ build:
     - image: website
       context: charts/website
 
-deploy:
   kubectl:
     manifests:
       - https://download.elastic.co/downloads/eck/1.3.1/all-in-one.yaml
