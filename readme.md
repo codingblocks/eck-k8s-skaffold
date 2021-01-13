@@ -168,7 +168,9 @@ Let's setup a quick build, and then I'll show you how you what it is like to use
 
 ```
 build:
-  artifacts
+  artifacts:
+    - name: website
+      context: chart/website
 ```
 
 Now skaffold knows about a docker image, Docker isn't the only thing Skaffold knows how to build, but it's the default.
@@ -181,9 +183,17 @@ Speaking of CI/CD servers, we can also use `skaffold deploy`
 
 ## Deploy
 
-TODO
+As we've seen, skaffold knows how to build and deploy, and we've got our architecture defined in a single file. Why not go one step further, and use Skaffold on the build server?
 
-`skaffold deploy --help`
+`skaffold build` will take care of building and publishing to an image repository. I wanted to focus on Elastic in this talk, so I don't want to go deep here, but there are a number of configurations, environment variables, and command flags that you can use to configure image repositories. Skaffold build can build, and publish to these repositories.
+
+## TODO: Actually do this to google?
+
+Once your artifacts are published, you can use configre a context on your deployment server and run `skaffold deploy` to actually dish out the kubernetes files. Anything you can do with skaffold (ie: profiles, helm, kubectl, kustomize, kapt, kaniko, etc) is available to you.
+
+Also, if you're lazy like me you can do both of these in one step, with the command that we ran earlier `skaffold run`, which will build, tag, and publish all in one command. Let's do that real quick, I'm going to deploy to a new namespace to simulate deploying to a remote cluster.
+
+`skaffold run -p filebeat --namespace sandiego`
 
 
 ## [What else can Skaffold do?](https://skaffold.dev/docs/)
