@@ -187,6 +187,8 @@ As we've seen, skaffold knows how to build and deploy, and we've got our archite
 
 `skaffold build` will take care of building and publishing to an image repository. I wanted to focus on Elastic in this talk, so I don't want to go deep here, but there are a number of configurations, environment variables, and command flags that you can use to configure image repositories. Skaffold build can build, and publish to these repositories.
 
+Skaffold also has support for custom build scripts.
+
 ## TODO: Actually do this to google?
 
 Once your artifacts are published, you can use configre a context on your deployment server and run `skaffold deploy` to actually dish out the kubernetes files. Anything you can do with skaffold (ie: profiles, helm, kubectl, kustomize, kapt, kaniko, etc) is available to you.
