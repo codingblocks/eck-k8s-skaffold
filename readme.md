@@ -14,11 +14,13 @@ By the end of this presentation, you will be creating your own Elastic Stack arc
 ## About the Author:
 Joe Zack is a Software Developer with a focus in streaming analytics and a newfound love of DevOps. He is a host of the Coding Blocks podcast, and he wants to #getgood at Python.
 
-## Before Starting
-
-- Reset Kuberentes!
-
 ## Presentation
+
+Here is a recording of the presentation on YouTube:
+
+[![YouTube Video of the Presentation](https://img.youtube.com/vi/Fu5CpVaiE_E/0.jpg)](https://www.youtube.com/watch?v=Fu5CpVaiE_E)
+
+The rough outline of the content of the video, and commands, is also available below:
 
 ### Title
 
@@ -230,4 +232,4 @@ I love Elastic, Kubernetes and Skaffold. If your org has already decided to run 
 ## Resources
 
 - [Elastic Cloud on Kubernetes Quickstart](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-quickstart.html)
-- [Get started with skaffold](https://skaffold.dev/docs/quickstart/)
+- [Get started with Skaffold](https://skaffold.dev/docs/quickstart/)
