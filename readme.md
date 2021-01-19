@@ -189,9 +189,17 @@ As we've seen, skaffold knows how to build and deploy, and we've got our archite
 
 Skaffold also has support for custom build scripts.
 
-## TODO: Actually do this to google?
+Here is a sample command to build your artifacts with a tag of "sandimas" (as in "San Dimas High School Football Rules!")
+
+`skaffold build --tag sandimas`
+
+## Actually do this to google?
 
 Once your artifacts are published, you can use configre a context on your deployment server and run `skaffold deploy` to actually dish out the kubernetes files. Anything you can do with skaffold (ie: profiles, helm, kubectl, kustomize, kapt, kaniko, etc) is available to you.
+
+`skaffold deploy --images website:sandimas  --kube-context=linode --profile no-website`
+
+Note: Normally you would be pushing artifacts to a container registry, which is not easy to setup in an open-source project. An easy way to do this so that you can work with local images and then publish to a container registry is to pass an additional argument here to prefix each of your images: `--default-repo gcr.io/my-project-here-or-whatever`
 
 Also, if you're lazy like me you can do both of these in one step, with the command that we ran earlier `skaffold run`, which will build, tag, and publish all in one command. Let's do that real quick, I'm going to deploy to a new namespace to simulate deploying to a remote cluster.
 

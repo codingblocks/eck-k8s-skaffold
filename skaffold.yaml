@@ -31,3 +31,7 @@ profiles:
         path: /deploy/kubectl/manifests
         value:
           - k8s/filebeat/*
+  - name: no-website
+    patches:
+      - op: remove
+        path: /deploy/helm
