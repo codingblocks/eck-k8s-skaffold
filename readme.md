@@ -195,7 +195,7 @@ Here is a sample command to build your artifacts with a tag of "sandimas" (as in
 
 `skaffold build --tag sandimas`
 
-## Actually do this to google?
+## Deploying to a remote cluster
 
 Once your artifacts are published, you can use configre a context on your deployment server and run `skaffold deploy` to actually dish out the kubernetes files. Anything you can do with skaffold (ie: profiles, helm, kubectl, kustomize, kapt, kaniko, etc) is available to you.
 
