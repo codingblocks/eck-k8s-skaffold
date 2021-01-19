@@ -4,7 +4,7 @@ metadata:
   name: quickstart
 spec:
   type: filebeat
-  version: 7.10.1
+  version: 7.10.2
   elasticsearchRef:
     name: quickstart
   config:
