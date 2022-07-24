@@ -47,8 +47,8 @@
 
 ## Install Elasticsearch
 
-* `kubectl apply -f k8s/3_dev/elasticsearch.yaml`
-* `kubectl apply -f k8s/3_dev/kibana.yaml`
+* `kubectl apply -f k8s/3_cluster/elasticsearch.yaml `
+* `kubectl apply -f k8s/3_cluster/kibana.yaml`
 * :elasticsearch, :statefulset, :pods, :persistentvolume, :service
 
 ## But how do we see it?
@@ -60,9 +60,22 @@
 * :secrets
 
 # Examples
+- Adding nodes
+- Delete nodes
+ - What happens to replicas?
 - Rolling upgrade
-- Downgrade
+    - Downgrade not supported!
 - Different types of services
-- multiple clusters
-- Links to documentation
+  - Kibana
+  - Logsearch
+- Setting up beats
+- Multiple clusters
 - Loading data
+
+# Where do we go from here?
+
+* [Documentation](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-overview.html)
+* [Settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html)
+* Helm Templates
+* Certificates
+* Custom applications
