@@ -1,12 +1,12 @@
 apiVersion: beat.k8s.elastic.co/v1beta1
 kind: Beat
 metadata:
-  name: meetup
+  name: apm
 spec:
   type: filebeat
   version: 7.17.5
   elasticsearchRef:
-    name: meetup
+    name: apm
   config:
     filebeat.inputs:
       - type: container
